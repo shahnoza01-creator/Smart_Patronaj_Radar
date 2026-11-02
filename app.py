@@ -22,7 +22,6 @@ def send_real_sms(phone_number, message_text):
     }
     try:
         response = requests.post(url, json=payload, headers=headers)
-        # Сервер қайтарган JSON ёки хом матн жавобини хавфсиз ўқиш
         try:
             return response.json()
         except:
