@@ -22,7 +22,15 @@ def send_real_sms(phone_number, message_text):
     }
     try:
         response = requests.post(url, json=payload, headers=headers)
-        return response.json()
+        # Сервер қайтарган JSON ёки хом матн жавобини хавфсиз ўқиш
+        try:
+            return response.json()
+        except:
+            return {
+                "status": "error", 
+                "status_code": response.status_code,
+                "raw_response": response.text
+            }
     except Exception as e:
         return {"status": "error", "message": str(e)}
 
@@ -70,7 +78,7 @@ with col_s1:
     if st.button("📲 Барча рўйхатдагиларга SMS юбориш"):
         with st.spinner("SMS юборилмоқда..."):
             res = send_real_sms(target_phone, sms_text)
-            st.success(f"✅ Кунлик режадаги фуқаро ({target_phone}) рақамига реал SMS юборилди!")
+            st.success(f"✅ Кунлик режадаги фуқаро ({target_phone}) рақамига SMS сўрови юборилди!")
             st.json(res)
 
 with col_s2:
@@ -78,5 +86,5 @@ with col_s2:
         urgent_msg = "ШОШИЛИНЧ: Саломатлигингизни текшириш учун патронаж кўригига тайёр туринг ёки шифокорга мурожаат қилинг!"
         with st.spinner("Шошилинч SMS юборилмоқда..."):
             res = send_real_sms(target_phone, urgent_msg)
-            st.warning("⚠️ Қизил гуруҳдаги бемор рақамига шошилинч SMS юборилди!")
+            st.warning("⚠️ Қизил гуруҳдаги бемор рақамига шошилинч SMS сўрови юборилди!")
             st.json(res)
